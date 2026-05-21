@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: ai-tutor-web
+    env: docker
+    region: oregon
+    plan: free
+    branch: main
+    envVars:
+      - key: TUTOR_API_KEY
+        generateValue: true
+      - key: GEMINI_API_KEY
+        sync: false # ダッシュボード上で手動入力が必要

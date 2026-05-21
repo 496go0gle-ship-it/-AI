@@ -1,5 +1,8 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
+import os
 from dotenv import load_dotenv
 
 from api.routes import router as tutor_router
@@ -24,6 +27,18 @@ app.add_middleware(
 
 # APIルーターの登録
 app.include_router(tutor_router, prefix="/api/v1/tutor", tags=["Tutor"])
+
+# フロントエンドの静的ファイル配信設定
+# staticディレクトリが存在するか確認してからマウントする
+if os.path.exists("static"):
+    app.mount("/static", StaticFiles(directory="static"), name="static")
+
+@app.get("/")
+async def serve_frontend():
+    """ルートURLにアクセスした際にフロントエンドのHTMLを返す"""
+    if os.path.exists("static/index.html"):
+        return FileResponse("static/index.html")
+    return {"message": "Frontend not found. Please create static/index.html"}
 
 @app.get("/health")
 def health_check():
