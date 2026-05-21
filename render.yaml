@@ -7,6 +7,6 @@ services:
     branch: main
     envVars:
       - key: TUTOR_API_KEY
-        generateValue: true
+        value: my-secret-key-123
       - key: GEMINI_API_KEY
         sync: false # ダッシュボード上で手動入力が必要
