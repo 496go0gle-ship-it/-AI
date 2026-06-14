@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, Security
 from fastapi.security import APIKeyHeader
+from fastapi import Request
 import os
 
 from schemas.request import ZPDRequest
@@ -21,20 +22,22 @@ def get_api_key(api_key_header: str = Security(api_key_header)):
     )
 
 @router.post("/recommend", response_model=NextActionRecommendation)
-async def recommend_next_action(request: ZPDRequest, api_key: str = Depends(get_api_key)):
-    """
-    学習履歴を受け取り、ZPDを計算して次に解くべき問題を推薦するエンドポイント
-    """
+@limiter.limit("10/minute")
+async def recommend_next_action(
+    http_request: Request,                          # ← slowapi用に別名で追加
+    request: ZPDRequest,                            # ← 既存のまま（ボディ）
+    api_key: str = Depends(get_api_key),            # ← 今は残す（Step 4で外す）
+):
     # 1. ZPDの計算
     zpd_info = calculate_zpd(request)
-    
+
     # 2. 学習履歴のサマリーテキスト作成（LLMのプロンプト用）
     history_summary = "直近の解答履歴:\n"
     for item in request.history:
         status = "正解" if item.is_correct else "不正解"
         history_summary += f"- ジャンル: {item.genre}, 難易度: {item.difficulty}, 結果: {status}\n"
-        
+
     # 3. LLMによる問題生成
     recommendation = generate_next_question(zpd_info, history_summary)
-    
+
     return recommendation

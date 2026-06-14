@@ -7,7 +7,13 @@ from dotenv import load_dotenv
 
 from api.routes import router as tutor_router
 
+from slowapi import Limiter, _rate_limit_exceeded_handler
+from slowapi.util import get_remote_address
+from slowapi.errors import RateLimitExceeded
 
+limiter = Limiter(key_func=get_remote_address)  # IPごとに数える
+app.state.limiter = limiter
+app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
 # Load environment variables from .env file
 load_dotenv()
