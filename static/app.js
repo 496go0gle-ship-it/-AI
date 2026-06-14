@@ -15,8 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const resultContent = document.getElementById('result-content');
     const resultTemplate = document.getElementById('result-template');
     
-    // API_KEY
-    const API_KEY = "my-secret-key-123";
+    // API_KEYは環境変数から取得（ビルドツールで埋め込む想定）
 
     // Event Listeners
     difficultyInput.addEventListener('input', (e) => {
@@ -67,8 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const response = await fetch('/api/v1/tutor/recommend', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json',
-                    'X-API-Key': API_KEY
+                    'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
                     student_id: state.student_id,
@@ -87,7 +85,7 @@ document.addEventListener('DOMContentLoaded', () => {
             resultContent.innerHTML = `
                 <div class="info-block" style="border-left: 4px solid var(--danger)">
                     <h4>❌ エラーが発生しました</h4>
-                    <p>API通信に失敗しました。サーバーが起動しているか、APIキーが正しいか確認してください。</p>
+                    <p>API通信に失敗しました。サーバーが起動しているか確認してください。</p>
                     <p style="font-size: 0.8rem; margin-top: 10px; color: var(--text-muted)">${error.message}</p>
                 </div>
             `;

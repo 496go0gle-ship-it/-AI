@@ -29,7 +29,7 @@ def get_api_key(api_key_header: str = Security(api_key_header)):
 async def recommend_next_action(
     http_request: Request,                          # ← slowapi用に別名で追加
     request: ZPDRequest,                            # ← 既存のまま（ボディ）
-    api_key: str = Depends(get_api_key),            # ← 今は残す（Step 4で外す）
+#
 ):
     # 1. ZPDの計算
     zpd_info = calculate_zpd(request)
