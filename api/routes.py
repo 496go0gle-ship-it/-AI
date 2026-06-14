@@ -27,16 +27,15 @@ def get_api_key(api_key_header: str = Security(api_key_header)):
 @router.post("/recommend", response_model=NextActionRecommendation)
 @limiter.limit("10/minute")
 async def recommend_next_action(
-    http_request: Request,                          # ← slowapi用に別名で追加
-    request: ZPDRequest,                            # ← 既存のまま（ボディ）
-#
+    request: Request,        # ← slowapiが名前で探す本物のRequest（この名前必須）
+    payload: ZPDRequest,     # ← リクエストボディ（生徒の解答履歴）
 ):
     # 1. ZPDの計算
-    zpd_info = calculate_zpd(request)
+    zpd_info = calculate_zpd(payload)
 
     # 2. 学習履歴のサマリーテキスト作成（LLMのプロンプト用）
     history_summary = "直近の解答履歴:\n"
-    for item in request.history:
+    for item in payload.history:
         status = "正解" if item.is_correct else "不正解"
         history_summary += f"- ジャンル: {item.genre}, 難易度: {item.difficulty}, 結果: {status}\n"
 
