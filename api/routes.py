@@ -8,6 +8,9 @@ from schemas.response import NextActionRecommendation
 from services.zpd_service import calculate_zpd
 from services.llm_service import generate_next_question
 
+from limiter import limiter
+
+
 router = APIRouter()
 
 API_KEY_NAME = "X-API-Key"
