@@ -5,3 +5,4 @@ google-genai
 python-dotenv
 aiofiles
 jinja2
+slowapi

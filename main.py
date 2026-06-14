@@ -7,6 +7,8 @@ from dotenv import load_dotenv
 
 from api.routes import router as tutor_router
 
+
+
 # Load environment variables from .env file
 load_dotenv()
 
@@ -19,7 +21,7 @@ app = FastAPI(
 # CORS設定（フロントエンドからの呼び出しを許可）
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # 本番環境では特定のドメインに絞る
+    allow_origins=["https://ai-tutor-web.onrender.com"],  # ← ["*"] から自分のドメインに
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
