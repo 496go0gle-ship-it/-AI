@@ -27,7 +27,7 @@ app = FastAPI(
 # CORS設定（フロントエンドからの呼び出しを許可）
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://ai-tutor-web.onrender.com"],  # ← ["*"] から自分のドメインに
+    allow_origins=["https://ai-tutor-web-10ku.onrender.com"],  # ← ["*"] から自分のドメインに
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
